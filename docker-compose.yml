@@ -19,9 +19,6 @@ services:
     container_name: ${PROJECT_NAME}-php-fpm
     depends_on:
       - mysql
-    environment:
-    - DATABASE_URL=${DATABASE_URL}
-    - APP_ENV=${APP_ENV}
 
   php-cli:
     build:
@@ -33,16 +30,18 @@ services:
 
   mysql:
     image: mysql:latest
-    # command: --default-authentication-plugin=mysql_native_password
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
     volumes:
       - mysql:/var/lib/mysql:delegated
-    container_name: mysql
-    # restart: always
+    restart: always
     environment:
       - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
       - "MYSQL_DATABASE=${MYSQL_DATABASE}"
       - "MYSQL_USER=${MYSQL_USER}"
       - "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
+    ports:
+          - 3306:3306
 
 volumes:
   mysql:
